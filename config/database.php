@@ -62,7 +62,6 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
-
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
@@ -77,6 +76,15 @@ return [
             'search_path' => 'public',
             'sslmode' => 'prefer',
         ],
+        'MONGODB' => [
+            'driver' => 'mongodb',
+            'host' => env('MONGODB_DB_HOST', 'localhost'),
+            'port' => env('MONGODB_DB_PORT', '27017'),
+            'database' => env('MONGODB_DB_DATABASE', 'tags'),
+            'username' => env('MONGODB_DB_USERNAME', ''),
+            'password' => env('MONGODB_DB_PASSWORD', ''),
+        ],
+
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
