@@ -84,7 +84,11 @@ return [
             'username' => env('MONGODB_DB_USERNAME', ''),
             'password' => env('MONGODB_DB_PASSWORD', ''),
         ],
-
+        /*'MONGODB' => [
+            'driver' => 'mongodb',
+            'dsn' => env('MONGODB_URI'),
+            'database' => 'mediumstags',
+        ],*/
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',

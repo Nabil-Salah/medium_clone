@@ -19,6 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
+        'bio',
+        'profilepic',
+        'likescount',
         'email',
         'password',
     ];
@@ -42,4 +46,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    public function articles(){
+        return $this->hasMany(Article::class)->latest();
+    }
+
+    public function likings(){
+        return $this->belongsToMany(User::class,'user_like','follower_id','user_id')->withTimestamps();
+    }
+
+    public function likers(){
+        return $this->belongsToMany(User::class,'user_like','user_id','follower_id')->withTimestamps();
+    }
+
+    public function getImageURL(){
+        if($this->profilepic){
+            return url('storage/'. $this->profilepic);
+        }
+        return "https://api.dicebear.com/6.x/fun-emoji/svg?seed={$this->username}";
+    }
 }
