@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ArticlesController extends Controller
 {
@@ -18,6 +20,20 @@ class ArticlesController extends Controller
         $validated = request()->validate([
             'content' => 'required|min:3|max:240'
         ]);
+        $tags_list = \request('tags');
+        $arrayoftags = explode(" ", $tags_list);
+        $refinedarray = [];
+        foreach ($arrayoftags as $element){
+            $ret = DB::connection('MONGODB')->collection('tags')->where('name',$element)->get();
+            if(empty($ret)){
+                $newtag = new Tag::class(['name'=>$element]);
+                DB::connection('MONGODB')->collection('tags')->save($newtag);
+            }
+            foreach ($ret as $refined){
+                array_push($refinedarray,$refined['name']);
+
+            }
+        }
         $validated['user_id'] = auth()->id();
         Article::create($validated);
 
