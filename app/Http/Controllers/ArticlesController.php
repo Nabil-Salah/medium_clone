@@ -18,24 +18,32 @@ class ArticlesController extends Controller
     public function store()
     {
         $validated = request()->validate([
-            'content' => 'required|min:3|max:240'
+            'description' => 'required|min:3|max:240',
+            'title' => 'required|min:3|max:240'
         ]);
-        $tags_list = \request('tags');
+        $tags_list = \request('tag');
         $arrayoftags = explode(" ", $tags_list);
         $refinedarray = [];
         foreach ($arrayoftags as $element){
             $ret = DB::connection('MONGODB')->collection('tags')->where('name',$element)->get();
+
             if(empty($ret)){
-                $newtag = new Tag::class(['name'=>$element]);
+                $newtag = new Tag;
+                $newtag->setAttribute('name',$element);
                 DB::connection('MONGODB')->collection('tags')->save($newtag);
             }
             foreach ($ret as $refined){
                 array_push($refinedarray,$refined['name']);
-
             }
         }
-        $validated['user_id'] = auth()->id();
-        Article::create($validated);
+        $validated['authorid'] = auth()->id();
+        $art =  Article::create($validated);
+        foreach ($refinedarray as $tag){
+            $article_tag = DB::insert('INSERT INTO article_tag(article_id, tag_name, created_at, updated_at)VALUES (?, ?, ?, ?);',
+                [$art['id'],$tag,now(),now()]);
+
+        }
+        dd($art['id']);
 
         return redirect()->route('dashboard')->with('success','Idea created successfully !');
     }
