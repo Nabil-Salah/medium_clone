@@ -16,7 +16,7 @@
     </style>
 </head>
 <body class="antialiased">
-    @include('layout.nav')
+{{--    @include('layout.nav')--}}
     {{-- Page content goes here --}}
     @yield('content')
 </body>
