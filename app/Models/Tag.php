@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
 {
+    use HasFactory;
     protected $connection = 'MONGODB';
+    protected $collection = 'tags';
     protected $casts = ['name' => 'string'];
     protected $fillable = [
         'name'

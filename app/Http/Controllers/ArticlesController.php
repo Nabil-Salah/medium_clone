@@ -25,13 +25,13 @@ class ArticlesController extends Controller
         $arrayoftags = explode(" ", $tags_list);
         $refinedarray = [];
         foreach ($arrayoftags as $element){
-            $ret = DB::connection('MONGODB')->collection('tags')->where('name',$element)->get();
-
-            if(empty($ret)){
+            $temp = DB::connection('MONGODB')->collection('tags')->where('name', $element)->get();
+            if($temp->isEmpty()){
                 $newtag = new Tag;
                 $newtag->setAttribute('name',$element);
-                DB::connection('MONGODB')->collection('tags')->save($newtag);
+                DB::connection('MONGODB')->collection('tags')->insert($newtag->toArray());
             }
+            $ret =DB::connection('MONGODB')->collection('tags')->where('name',$element)->get();
             foreach ($ret as $refined){
                 array_push($refinedarray,$refined['name']);
             }
@@ -43,7 +43,7 @@ class ArticlesController extends Controller
                 [$art['id'],$tag,now(),now()]);
 
         }
-        dd($art['id']);
+        //dd($art['id']);
 
         return redirect()->route('dashboard')->with('success','Idea created successfully !');
     }

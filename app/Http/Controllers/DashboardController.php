@@ -32,7 +32,7 @@ class DashboardController extends Controller
         ['tag' => $refinedarray]);*/
         $articles = DB::table('article_tag as bt')
             ->select('b.*')
-            ->join('article as b', 'b.id', '=', 'bt.article_id')
+            ->join('articles as b', 'b.id', '=', 'bt.article_id')
             ->whereIn('bt.tag_name', $refinedarray)
             ->groupBy('b.id')
             ->get();
