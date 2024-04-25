@@ -30,6 +30,12 @@ docker run --name some-mongo -d mongo:tag
 ## Usage
 
 To use Medium-clone run 
+
+this will migrate(make all your databases needed)
+```bash
+php artisan migrate
+```
+this will run your application.
 ```bash
 php artisan serve
 ```
